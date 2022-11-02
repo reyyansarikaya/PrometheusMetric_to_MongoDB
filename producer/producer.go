@@ -20,7 +20,7 @@ http_requests_total{code="200",method="POST"} 3
 `
 	jsonValue := ParseMetrics(metric)
 	byteFormatJson, _ := json.Marshal(jsonValue)
-	conn, _ := kafka.DialLeader(context.Background(), "tcp", "localhost:9092", "test", 0)
+	conn, _ := kafka.DialLeader(context.Background(), "tcp", "localhost:9092", "hb-project", 0)
 	conn.SetWriteDeadline(time.Now().Add(time.Second * 10))
 	conn.WriteMessages(kafka.Message{Value: byteFormatJson})
 }
