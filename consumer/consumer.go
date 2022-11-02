@@ -7,11 +7,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/segmentio/kafka-go"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
+	"os"
 	"time"
 )
 
@@ -40,7 +42,15 @@ func addMetricToDB(jsonMetrics string) {
 		log.Fatal(err)
 	}
 
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb+srv://reyyansar:12345678**@cluster0.wrzj6zo.mongodb.net/?retryWrites=true&w=majority"))
+	// load .env file from given path
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	mongoUri := os.Getenv("MONGODB_URI")
+	client, err := mongo.NewClient(options.Client().ApplyURI(mongoUri))
 	if err != nil {
 		log.Fatal(err)
 	}
